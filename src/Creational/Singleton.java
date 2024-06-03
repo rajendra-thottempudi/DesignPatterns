@@ -1,3 +1,5 @@
+package Creational;
+
 public class Singleton {
     //earlyLoading
     public static Singleton objA = new Singleton();
