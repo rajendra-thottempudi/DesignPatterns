@@ -6,6 +6,7 @@ public class Pizza {
     private float totalPrice = 0;
 
     private Size size;
+    //This can also be a Set
     private List<Topping> toppings = new ArrayList<>();
     private Crust crust;
     private Cheese cheese;
