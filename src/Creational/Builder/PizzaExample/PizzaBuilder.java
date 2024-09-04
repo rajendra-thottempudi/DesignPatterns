@@ -8,20 +8,17 @@ public class PizzaBuilder {
 
     public PizzaBuilder withTopping(Topping topping) {
         pizza.addTopping(topping);
-        pizza.addToPrice(topping.getCost());
         return this;
     }
 
     public PizzaBuilder withSize(Size size) {
         pizza.setSize(size);
-        pizza.addToPrice(size.getCost());
         sizeSet = true;
         return this;
     }
 
     public PizzaBuilder withCrust(Crust crust) {
         pizza.setCrust(crust);
-        pizza.addToPrice(crust.getCost());
         crustSet = true;
         return this;
     }
