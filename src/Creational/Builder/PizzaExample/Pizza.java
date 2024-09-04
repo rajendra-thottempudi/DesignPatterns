@@ -44,10 +44,18 @@ public class Pizza {
     }
 
     public float getTotalPrice() {
+        //Any strategy could be used to get totalPrice
+
+        for(Topping t : toppings) {
+            totalPrice += t.getCost();
+        }
+
+        totalPrice += cheese.getCost() * size.getCost() + crust.getCost() * size.getCost();
+
         return totalPrice;
     }
 
-    public void addToPrice(float price) {
-        this.totalPrice = totalPrice + price;
-    }
+//    public void addToPrice(float price) {
+//        this.totalPrice = totalPrice + price;
+//    }
 }
