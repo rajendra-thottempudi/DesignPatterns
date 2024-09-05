@@ -1,18 +1,18 @@
 package Behavioral.StatePatternExamples.RemoteExample;
 
-public class TVRemote {
+public class TVRemoteTest {
 
     public static void main(String[] args) {
-        TVContext context = new TVContext();
+        Remote context = new Remote();
         State tvStartState = new TVStartState();
         State tvStopState = new TVStopState();
 
         context.setState(tvStartState);
-        context.doAction();
+        context.action();
 
 
         context.setState(tvStopState);
-        context.doAction();
+        context.action();
 
     }
 

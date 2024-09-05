@@ -33,14 +33,14 @@ public class Main_Logger {
         Singleton logger2 = Singleton.getInstance();
         System.out.println(logger2);
 
-        MyClass.doSomething("hello");
+        MyClass.doSomething(logger1, "hello");
     }
 }
 
 // Another class with a static method
 class MyClass {
-    public static void doSomething(String text) {
-        System.out.println(text);
+    public static void doSomething(Singleton logger, String text) {
+        logger.log(text + " logged ");
     }
 }
 

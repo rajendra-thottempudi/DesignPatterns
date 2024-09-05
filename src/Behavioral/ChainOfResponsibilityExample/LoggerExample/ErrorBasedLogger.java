@@ -4,8 +4,17 @@ public class ErrorBasedLogger extends Logger {
     public ErrorBasedLogger(int levels) {
         this.levels=levels;
     }
+
     @Override
-    protected void displayLogInfo(String msg) {
-        System.out.println("ERROR LOGGER INFO: "+msg);
+    public void setNextLevelLogger(Logger logger){
+        this.next = logger;
+    }
+
+    @Override
+    protected void logMessage(int levels, String msg) {
+        if(levels >= this.levels){
+            System.out.println("ERROR LOGGER INFO: "+msg);
+        }
+        if(this.next!=null) next.logMessage(levels, msg);
     }
 }

@@ -109,12 +109,22 @@ class Hand {
 // Rule interface for evaluating poker hands
 interface IRule {
     boolean evaluate(Hand hand);
-
+    int getPriority();
     String getRuleName();
 }
 
 // FlushRule class for evaluating Flush hand
 class FlushRule implements IRule {
+    int priority;
+    FlushRule(int p){
+        this.priority = p;
+    }
+
+    @Override
+    public int getPriority(){
+        return this.priority;
+    }
+
     @Override
     public boolean evaluate(Hand hand) {
         char symbolToCompare = hand.get(0).getSymbol();
@@ -135,6 +145,15 @@ class FlushRule implements IRule {
 
 // ThreeOfAKindRule class for evaluating Three of a Kind hand
 class ThreeOfAKindRule implements IRule {
+    int priority;
+    ThreeOfAKindRule(int p){
+        this.priority = p;
+    }
+
+    @Override
+    public int getPriority(){
+        return this.priority;
+    }
     @Override
     public boolean evaluate(Hand hand) {
         Map<Integer, Integer> frequencyMap = new HashMap<>();
@@ -155,6 +174,15 @@ class ThreeOfAKindRule implements IRule {
 
 // PairRule class for evaluating Pair hand
 class PairRule implements IRule {
+    int priority;
+    PairRule(int p){
+        this.priority = p;
+    }
+
+    @Override
+    public int getPriority(){
+        return this.priority;
+    }
     @Override
     public boolean evaluate(Hand hand) {
         Map<Integer, Integer> frequencyMap = new HashMap<>();
@@ -174,12 +202,12 @@ class PairRule implements IRule {
 }
 
 // Game class to manage the poker game
-class PokerGame {
-    private Hand hand;
+class PokerRound {
+    private List<Hand> hands;
     private List<IRule> rules;
 
-    public PokerGame(Hand hand, List<IRule> rules) {
-        this.hand = hand;
+    public PokerRound(List<Hand> hand, List<IRule> rules) {
+        this.hands = hand;
         this.rules = rules;
     }
 
@@ -188,16 +216,27 @@ class PokerGame {
         rules.add(0, luckyRule);
     }
 
-    public String checkIfWinning(IRule luckyRule) {
+    public String findWinnger(IRule luckyRule) {
         if (luckyRule != null) {
             rearrangeRules(luckyRule);
         }
-        for (IRule rule : rules) {
-            if (rule.evaluate(hand)) {
-                return rule.getRuleName() + " rule matches with the hand: " + hand;
+        Hand winning = null;
+        IRule winningHandRule = null;
+        for(Hand curr : hands){
+            for (IRule rule : rules) {
+                if (rule.evaluate(curr)) {
+                    if(winningHandRule == null || winningHandRule.getPriority() > rule.getPriority()){
+                        winningHandRule = rule;
+                        winning = curr;
+                        break;
+                    }
+                }
             }
         }
-        return "No rule matches for the current hand";
+
+        if(winning == null)  return "No rule matches for the current hand";
+
+        return winningHandRule.getRuleName() + " rule matches with the hand: " + winning;
     }
 }
 
@@ -219,15 +258,26 @@ class Utility {
 public class Main_Poker {
     public static void main(String[] args) {
         List<IRule> rules = new ArrayList<>();
-        rules.add(new FlushRule());
-        rules.add(new ThreeOfAKindRule());
-        rules.add(new PairRule());
-
-        for (int i = 0; i < 10; i++) {
+        rules.add(new FlushRule(1));
+        rules.add(new ThreeOfAKindRule(2));
+        rules.add(new PairRule(3));
+        List<Hand> hands =  new ArrayList<>();
+        Hand a = new Hand();
+        Card c1 = new Card(3,'a');
+        Card c2 = new Card(4,'a');
+        Card c3 = new Card(5,'a');
+        Card c4 = new Card(6,'a');
+        Card c5 = new Card(7,'a');
+        a.add(c1);a.add(c2);a.add(c3);a.add(c4);a.add(c5);
+        hands.add(a);
+        for (int i = 0; i < 5; i++) {
             Hand hand = Utility.buildRandomCards();
-            PokerGame pokerGame = new PokerGame(hand, rules);
-            System.out.println(pokerGame.checkIfWinning(null));
+            hands.add(hand);
+            System.out.println(" current hand : " + hand);
         }
+
+        PokerRound pokerGame = new PokerRound(hands, rules);
+        System.out.println(pokerGame.findWinnger(null));
     }
 }
 

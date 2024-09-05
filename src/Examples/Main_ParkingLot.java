@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Slot class representing a parking slot
-class Slot {
+abstract class Slot {
     protected int slotId;
     protected boolean free;
 

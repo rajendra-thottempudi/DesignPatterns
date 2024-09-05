@@ -102,6 +102,7 @@ class Locker {
     private final LockerSize lockerSize;
     private final String locationId;
     private LockerState lockerState;
+    private LockerPackage currPackage;
 
     public Locker(String lockerId, LockerSize lockerSize, String locationId, LockerState lockerState) {
         this.lockerId = lockerId;
@@ -119,7 +120,13 @@ class Locker {
             throw new IllegalStateException("Locker state is " + this.lockerState + " and thus package cannot be placed");
         }
         // Logic to add the package
+        // Add the package to the locker
+        this.currPackage = lockerPackage;
+
+        // Change the locker state to closed or occupied as appropriate
+        this.lockerState = LockerState.BOOKED;
     }
+
 }
 
 class LockerLocation {
